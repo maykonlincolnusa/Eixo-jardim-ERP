@@ -1,88 +1,120 @@
 <p align="center">
-  <img src="assets/eixo-cover.svg" alt="Eixo: connected operations, designed with intent" width="100%" />
+  <img src="assets/eixo-cover.svg" alt="Eixo x Jardim: an engineering case study in connected school operations" width="100%" />
 </p>
 
 <p align="center">
-  <strong>Less operational noise. More connected decisions.</strong>
+  <strong>A connected operations platform for a care-first school.</strong>
 </p>
 
 <p align="center">
-  <a href="#the-idea">The idea</a> &nbsp;|&nbsp;
-  <a href="#the-system">The system</a> &nbsp;|&nbsp;
-  <a href="#the-craft">The craft</a> &nbsp;|&nbsp;
-  <a href="#portfolio-boundary">Portfolio boundary</a>
+  <a href="#the-context">Context</a> &nbsp;|&nbsp;
+  <a href="#the-engineering-challenge">Challenge</a> &nbsp;|&nbsp;
+  <a href="#the-system-design">System design</a> &nbsp;|&nbsp;
+  <a href="#engineering-decisions">Decisions</a> &nbsp;|&nbsp;
+  <a href="#public-portfolio-boundary">Boundary</a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/PORTFOLIO-CASE%20STUDY-0B132B?style=flat-square&labelColor=0B132B" alt="Portfolio case study" />
-  <img src="https://img.shields.io/badge/STATUS-ACTIVELY%20EVOLVING-2D6A4F?style=flat-square&labelColor=0B132B" alt="Actively evolving" />
-  <img src="https://img.shields.io/badge/PRINCIPLE-PRIVACY--CONSCIOUS-CA6702?style=flat-square&labelColor=0B132B" alt="Privacy-conscious by design" />
+  <img src="https://img.shields.io/badge/ENGINEERING-CASE%20STUDY-0B132B?style=flat-square&labelColor=0B132B" alt="Engineering case study" />
+  <img src="https://img.shields.io/badge/CLIENT-JARDIM%20EDUCACAO-2D6A4F?style=flat-square&labelColor=0B132B" alt="Client Jardim Espaço de Educação" />
+  <img src="https://img.shields.io/badge/STATUS-ACTIVE%20DEVELOPMENT-CA6702?style=flat-square&labelColor=0B132B" alt="Active development" />
 </p>
+
+# Eixo x Jardim
+
+Eixo is a custom operations platform being developed for [Jardim Espaço de Educação](https://jardimespacoeducacao.com.br/), an early-childhood school in Jacarepaguá, Rio de Janeiro. This repository presents the engineering case behind the system: how a school built around care, learning, nutrition, and family trust can gain a more connected operational backbone without losing the human quality of its work.
+
+> The design goal is not to make a school feel like an ERP. It is to give every team a clearer way to care for the work in front of them, while making the organization easier to understand as a whole.
 
 ---
 
-## The idea
+## The context
 
-Eixo is a connected operations platform for education-centered organizations. It is a portfolio project about a simple but difficult question:
+Jardim serves children from early infancy through early childhood in a setting where care and education are inseparable. Its public educational proposition emphasizes affection, autonomy, attentive listening, structured routines, and healthy food prepared as part of the school day.
 
-> How can distinct teams move independently without losing the shared context that keeps an organization working as one?
+That is meaningful engineering context. A school like Jardim does not run on a single workflow. It runs on many interdependent routines: educational administration, team coordination, food planning, purchasing, inventory, financial control, family-facing processes, and leadership decisions. When those routines are managed in separate tools or informal channels, the real cost is not only duplication. It is lost context.
 
-Most operational systems add another place to enter data. Eixo is being designed to do something more useful: make everyday work clearer for each team, connect the moments that matter across the organization, and turn reliable operational signals into better decisions.
+Eixo was conceived to make that context visible, usable, and appropriately bounded.
 
-This is not about making every workflow look the same. It is about giving each role the right context, at the right moment, while keeping the broader operation visible and coherent.
+## The engineering challenge
 
-## The product thesis
+The technical challenge was to create a system that supports multiple operational domains without forcing them into a single, generic interface or a tightly coupled codebase.
 
-| 01 - Make work obvious | 02 - Connect meaningful events | 03 - Support the next decision |
-| --- | --- | --- |
-| Teams should know what needs attention without hunting through messages, spreadsheets, or disconnected tools. | A completed action in one area can provide useful context elsewhere without forcing every team into one interface. | Leadership needs timely signals, not a retrospective pile of reports. |
+The product needed to balance two truths:
 
-The result is a product direction that values focus at the operational edge and clarity at the organizational level.
+| At the edge of the operation | At the level of the school |
+| --- | --- |
+| A team needs a calm, focused view of the work it owns. | Leadership needs a trustworthy, connected picture of the operation. |
+| A workflow should remain usable when an adjacent process is incomplete. | Important events should inform downstream decisions. |
+| Access must reflect real responsibilities. | Information must move without becoming indiscriminately visible. |
 
-## The system
+The result is a system direction built around **focused workspaces, explicit domain boundaries, and shared operational signals**.
 
-Eixo is organized as a set of independent, connected capabilities. Each domain can evolve around its own workflows while contributing to a shared operational picture.
+## The system design
+
+Eixo treats the school as a connected set of capabilities rather than one large administrative screen. The architecture is organized so that each area can own its rules and experience while contributing to a broader operational picture.
 
 ```mermaid
-flowchart LR
-    A["People at work"] --> B["Focused workspaces"]
-    B --> C["Domain capabilities"]
-    C --> D["Trusted operational signals"]
-    D --> E["Leadership visibility"]
+flowchart TB
+    C["Jardim school community"] --> X["Role-aware product experience"]
 
-    classDef primary fill:#0B132B,stroke:#0B132B,color:#FFFFFF
-    classDef accent fill:#2D6A4F,stroke:#2D6A4F,color:#FFFFFF
-    classDef signal fill:#CA6702,stroke:#CA6702,color:#FFFFFF
+    subgraph E["Eixo connected operations platform"]
+      X --> G["Access and orchestration"]
+      G --> A["School administration"]
+      G --> P["People operations"]
+      G --> F["Finance"]
+      G --> S["Supply and inventory"]
+      G --> N["Nutrition and food operations"]
+      A --> I["Operational insight"]
+      P --> I
+      F --> I
+      S --> I
+      N --> I
+    end
 
-    class A,E primary
-    class B,C accent
-    class D signal
+    I --> L["Leadership decisions"]
+
+    classDef foundation fill:#0B132B,stroke:#0B132B,color:#FFFFFF
+    classDef domain fill:#2D6A4F,stroke:#2D6A4F,color:#FFFFFF
+    classDef insight fill:#CA6702,stroke:#CA6702,color:#FFFFFF
+
+    class C,X,L foundation
+    class G,A,P,F,S,N domain
+    class I insight
 ```
 
-### A connected domain map
+This model is deliberately practical:
 
-| Domain | What it is designed to improve |
+- **Teams keep focus.** Each area receives an experience shaped around its actual work instead of an all-purpose back office.
+- **Boundaries stay explicit.** Business rules, data ownership, and responsibilities are clearer when domains are designed as independent capabilities.
+- **Signals travel with intent.** Relevant events can inform adjacent workflows and management visibility without turning every detail into shared data.
+- **The organization can evolve.** New capabilities can be added without asking every existing module to become more complex.
+
+## What Eixo brings together
+
+| Capability | The operational question it helps answer |
 | --- | --- |
-| **Daily operations** | Clear ownership, visibility of recurring work, and reliable follow-through. |
-| **Education administration** | A focused experience for the operational routines behind an education environment. |
-| **People operations** | Structured team workflows with appropriate access and context. |
-| **Finance** | Operational control and management-ready visibility. |
-| **Supply and inventory** | Better awareness of requests, purchasing, stock, and internal handoffs. |
-| **Food operations** | Planning and execution support for meal-related workflows. |
-| **Leadership** | A concise view of indicators, priorities, and action-oriented insight. |
+| **School administration** | What needs to happen to keep the academic and administrative routine moving? |
+| **People operations** | How can team processes be managed with clearer ownership and appropriate access? |
+| **Finance** | What is the current operational and financial picture behind the school day? |
+| **Supply and inventory** | What needs to be requested, purchased, replenished, or reconciled? |
+| **Nutrition and food operations** | How can planning and execution support a healthy, dependable meal routine? |
+| **Leadership view** | Which signals deserve attention, action, or a closer conversation? |
 
-## Designed around real work
+The purpose is not to centralize every action. The purpose is to make the right handoff, dependency, and decision visible at the moment it matters.
 
-The most important design choice in Eixo is to start with the person doing the work, not the database table behind it.
+## Engineering decisions
 
-- **Role-aware by default.** A workspace should feel relevant to the responsibility of the person using it.
-- **Calm interfaces.** Important actions and exceptions deserve attention; everything else should stay out of the way.
-- **Resilient workflows.** Day-to-day operations cannot pause simply because one adjacent workflow is incomplete.
-- **Shared truth, not shared clutter.** Information should travel where it is useful, without exposing more than is necessary.
+| Decision | Why it matters for Jardim |
+| --- | --- |
+| **Domain-aligned architecture** | Different areas of a school change at different speeds. Clear ownership prevents one workflow from destabilizing another. |
+| **Role-aware access** | Educational, operational, and leadership responsibilities require different levels of context and control. |
+| **Service-oriented integration** | Capabilities can exchange only the information they need through explicit contracts instead of a shared implementation. |
+| **Resilient workflow design** | The school day continues even when a related record or handoff needs later reconciliation. |
+| **Data quality as infrastructure** | Validation and processing are treated as part of reliable operations, not as an afterthought for reporting. |
+| **Containerized delivery** | Repeatable environments make it safer to develop, test, and evolve the system over time. |
 
-## The craft
-
-Eixo is as much an engineering exercise as it is a product exercise. The implementation explores a modular, service-oriented architecture that keeps business concerns explicit and future change manageable.
+## Technology, selected intentionally
 
 <p>
   <img src="https://img.shields.io/badge/Python-0B132B?style=flat-square&logo=python&logoColor=white" alt="Python" />
@@ -93,39 +125,36 @@ Eixo is as much an engineering exercise as it is a product exercise. The impleme
   <img src="https://img.shields.io/badge/Docker-0B132B?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
 </p>
 
-| Engineering focus | How it shows up in the project |
-| --- | --- |
-| **Modularity** | Domain-aligned capabilities with clear ownership and explicit boundaries. |
-| **Trust** | Authentication, role-aware authorization, and security-conscious configuration practices. |
-| **Data quality** | Validation and data-processing workflows treated as product infrastructure, not a later concern. |
-| **Delivery discipline** | Containerized services, automated checks, and repeatable deployment patterns. |
-| **Pragmatic UX** | Server-rendered workflows and modern web applications, selected for the needs of each experience. |
+The implementation combines Python application services, modern TypeScript web experiences, relational data stores, data-processing pipelines, containerized environments, and automated quality checks. The stack is not the case study by itself. It is the foundation that makes the product decisions above sustainable.
 
-## What I am optimizing for
+## Success is more than a dashboard
+
+Eixo is being developed to improve the quality of operational work before it improves the quality of reporting.
 
 ```text
-                 TODAY                              OVER TIME
-
-          Frictionless daily work        -->    A platform that can evolve
-          Clear accountability           -->    Durable operational knowledge
-          Useful management signals      -->    Better decisions at scale
-          Responsible data handling      -->    Trust that compounds
+Clearer next action
+        +
+Reliable handoffs between teams
+        +
+Appropriate access to context
+        +
+Signals leaders can act on
+        =
+An operation that can care for details without losing the whole picture
 ```
 
-## Portfolio boundary
+No operational metrics, personal data, or internal performance figures are published here. That is intentional: an engineering case study should show the problem-solving approach without turning a school's private reality into public collateral.
 
-This repository is intentionally a curated portfolio view, not a public production codebase or deployment guide.
+## Public portfolio boundary
 
-To protect the people and organization behind the work, it does not include production data, personal information, credentials, infrastructure identifiers, customer-specific configuration, live access, or operational instructions. The public material focuses on product thinking, system design, and engineering approach.
+This is a curated public case study. The production codebase, deployment configuration, operational records, credentials, integration details, and personal information remain private.
 
-That boundary is deliberate. Responsible software delivery means showing the work without treating real operational context as a portfolio asset.
+What is shared here is the part worth evaluating in public: the framing of the problem, the product model, the architectural choices, and the engineering discipline required to build a responsible system for a real organization.
 
 ## Current direction
 
-**Actively evolving.** Eixo continues to be shaped through iteration across product design, domain modeling, interaction design, and engineering foundations.
-
-If you would like to discuss the thinking behind the project, I am happy to talk about the product strategy, architecture decisions, and delivery practices that inform it.
+**Actively in development.** Eixo continues to evolve with the operational reality of Jardim, through ongoing work in product design, domain modeling, interaction design, and software engineering.
 
 <p align="center">
-  <sub>Built as an evolving portfolio project by <a href="https://github.com/maykonlincolnusa">@maykonlincolnusa</a>.</sub>
+  <sub>Engineering case study by <a href="https://github.com/maykonlincolnusa">@maykonlincolnusa</a> for <a href="https://jardimespacoeducacao.com.br/">Jardim Espaço de Educação</a>.</sub>
 </p>
